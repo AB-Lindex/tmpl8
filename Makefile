@@ -26,3 +26,6 @@ m-y:
 
 m-j:
 	go run . -s <test/m-input.json test/m-tmpl.yaml -v
+
+multi:
+	go run . -i test/m-input.yaml -i test/m-input.json test/m-tmpl.yaml -v -s

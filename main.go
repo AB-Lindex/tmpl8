@@ -33,6 +33,10 @@ func main() {
 
 	var output bytes.Buffer
 
+	if args.Verbose {
+		log.Info().Msgf("generating %d objects using %d templates", len(olist), len(templates))
+	}
+
 	for _, o := range olist {
 		err = handle(templates, o, &output)
 		if err != nil {
@@ -63,7 +67,7 @@ func handle(list []entry, o interface{}, w io.Writer) error {
 
 	for _, e := range list {
 		if args.Verbose {
-			log.Info().Msgf("applying template '%s'...", e.name)
+			log.Trace().Msgf("applying template '%s'...", e.name)
 		}
 
 		tmpl, err := template.New("base").Funcs(sprig.TxtFuncMap()).Parse(e.data)
