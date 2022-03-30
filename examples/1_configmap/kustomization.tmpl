@@ -1,0 +1,23 @@
+namespace: default
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+configMapGenerator:
+{{- range $root := . }}
+{{- if eq .name "." }}
+{{- range $dirs := .contents }}
+{{- if eq .type "directory" }}
+  - name: {{.name}}
+    files:
+{{- range $file := .contents }}
+{{- if eq .type "file" }}
+    - {{ .name }}={{ $dirs.name }}/{{ .name }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+{{- end }}
+
+resources:

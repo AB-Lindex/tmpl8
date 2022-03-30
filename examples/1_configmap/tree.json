@@ -1,0 +1,15 @@
+[
+  {"type":"directory","name":".","contents":[
+    {"type":"directory","name":"app1","contents":[
+      {"type":"file","name":"0_serviceaccount.yaml"},
+      {"type":"file","name":"1_deployment.yaml"},
+      {"type":"file","name":"2_service.yaml"}
+    ]},
+    {"type":"directory","name":"cronjob1","contents":[
+      {"type":"file","name":"0_serviceaccount.yaml"},
+      {"type":"file","name":"1_cronjob.yaml"}
+    ]},
+    {"type":"file","name":"kustomization.tmpl"},
+    {"type":"file","name":"tree.json"}
+  ]}
+]

@@ -1,0 +1,17 @@
+namespace: default
+
+generatorOptions:
+  disableNameSuffixHash: true
+
+configMapGenerator:
+  - name: app1
+    files:
+    - 0_serviceaccount.yaml=app1/0_serviceaccount.yaml
+    - 1_deployment.yaml=app1/1_deployment.yaml
+    - 2_service.yaml=app1/2_service.yaml
+  - name: cronjob1
+    files:
+    - 0_serviceaccount.yaml=cronjob1/0_serviceaccount.yaml
+    - 1_cronjob.yaml=cronjob1/1_cronjob.yaml
+
+resources:
