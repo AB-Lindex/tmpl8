@@ -37,8 +37,14 @@ func main() {
 		log.Info().Msgf("generating %d objects using %d templates", len(olist), len(templates))
 	}
 
+	t, err := prepare(templates)
+	if err != nil {
+		log.Error().Msgf("prepare-template-error: %v", err)
+		os.Exit(1)
+	}
+
 	for _, o := range olist {
-		err = handle(templates, o, &output)
+		err = process(t, o, &output)
 		if err != nil {
 			log.Error().Msgf("template-error: %v", err)
 			os.Exit(1)
@@ -59,24 +65,35 @@ func main() {
 
 }
 
-func handle(list []entry, o interface{}, w io.Writer) error {
-	// list, err := load(fn)
-	// if err != nil {
-	// 	return err
-	// }
+func prepare(list []entry) ([]*template.Template, error) {
+	if args.VeryVerbose {
+		log.Trace().Msgf("preparing %d template", len(list))
+	}
+	var tmpls []*template.Template
+
+	tmpl := template.New("base").Funcs(sprig.TxtFuncMap())
+	var err error
 
 	for _, e := range list {
-		if args.Verbose {
-			log.Trace().Msgf("applying template '%s'...", e.name)
+		if args.VeryVerbose {
+			log.Trace().Msgf("parsing template '%s'...", e.name)
 		}
-
-		tmpl, err := template.New("base").Funcs(sprig.TxtFuncMap()).Parse(e.data)
+		tmpl, err = tmpl.New(e.name).Parse(e.data)
 		if err != nil {
-			return err
+			return nil, err
 		}
+		tmpls = append(tmpls, tmpl)
+	}
+	return tmpls, nil
+}
 
+func process(tmpls []*template.Template, o interface{}, w io.Writer) error {
+	for _, tmpl := range tmpls {
+		if args.VeryVerbose {
+			log.Trace().Msgf("executing template '%s'...", tmpl.Name())
+		}
 		var buf bytes.Buffer
-		err = tmpl.Execute(&buf, o)
+		err := tmpl.Execute(&buf, o)
 		if err != nil {
 			return err
 		}

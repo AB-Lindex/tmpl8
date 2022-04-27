@@ -11,16 +11,20 @@ Generic (and Kubernetes-friendly) Templating Engine using the go text/template a
 Supported input formats: JSON and YAML
 
 ```
-tmpl8 [--input INPUT] [--output FILE] [--verbose] [--raw] [--split] TEMPLATE [TEMPLATE ...]
+tmpl8 [--input INPUT] [--output FILE] [--verbose] [--trace] [--raw] [--split] [--noinput] TEMPLATE [TEMPLATE ...]
 ```
 
 ### Options
-| Option            | Description |
-| ----------------- | ----------- |
-| `-i` / `--input`  | Manual assign where to read input object(s) from, use '`-`' to use stdin, multiple inputs supported |
-| `-o` / `--output` | Set output filename (instead of using `>`)             |
-| `-r` / `--raw`    | Don't ensure each template ends with a newline (not recommended for YAML output)|
-| `-s` / `--split`  | Split JSON input objects arrays to multiple objects parsed each (similar to YAMLs with `---` separators) |
+| Option             | Description |
+| -----------------  | ----------- |
+| `-i` / `--input`   | Manual assign where to read input object(s) from, use '`-`' to use stdin, multiple inputs supported |
+| `-z` / `--noinput` | Add an empty object as input (for template-only processing) |
+| `-o` / `--output`  | Set output filename (instead of using `>`)             |
+| `-r` / `--raw`     | Don't ensure each template ends with a newline (not recommended for YAML output)|
+| `-s` / `--split`   | Split JSON input objects arrays to multiple objects parsed each (similar to YAMLs with `---` separators) |
+
+## define/block support
+Any `define`/`block` helpers are useable in templates in all following template sources (and can be overridden)
 
 ## Examples
 
