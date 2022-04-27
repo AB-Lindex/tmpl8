@@ -18,6 +18,10 @@ type arguments struct {
 	NoInput     bool     `arg:"-z" help:"no input (equals -i '?{}')"`
 }
 
+func (arguments) Version() string {
+	return "v0.2.1"
+}
+
 func (arguments) Description() string {
 	return `tmpl8 - Generic (and Kubernetes-friendly) Templating Engine using the go text/template and Sprig functions
 

@@ -22,6 +22,7 @@ tmpl8 [--input INPUT] [--output FILE] [--verbose] [--trace] [--raw] [--split] [-
 | `-o` / `--output`  | Set output filename (instead of using `>`)             |
 | `-r` / `--raw`     | Don't ensure each template ends with a newline (not recommended for YAML output)|
 | `-s` / `--split`   | Split JSON input objects arrays to multiple objects parsed each (similar to YAMLs with `---` separators) |
+| `--version`        | Display current version |
 
 ## define/block support
 Any `define`/`block` helpers are useable in templates in all following template sources (and can be overridden)
