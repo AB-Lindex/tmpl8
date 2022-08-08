@@ -8,7 +8,7 @@ import (
 	"os"
 
 	"github.com/rs/zerolog/log"
-	"gopkg.in/yaml.v3"
+	yaml "gopkg.in/yaml.v3"
 )
 
 func importObjects() ([]interface{}, error) {
@@ -57,7 +57,7 @@ func appendEntry(olist []interface{}, buf []byte) ([]interface{}, error) {
 			os.Exit(1)
 		}
 		if args.Split {
-			if list, ok := InterfaceSlice(o); ok {
+			if list, ok := interfaceSlice(o); ok {
 				olist = append(olist, list...)
 			} else {
 				olist = append(olist, o)

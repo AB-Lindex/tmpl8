@@ -35,14 +35,14 @@ func execCmd(name string, args ...string) (stdout []byte, stderr []byte, err err
 
 	err = cmd.Start()
 	if err != nil {
-		return nil, nil, fmt.Errorf("failed to start 'kubectl': %v", err)
+		return nil, nil, fmt.Errorf("failed to start 'kubectl': %w", err)
 	}
 
 	wg.Wait()
 
 	err = cmd.Wait()
 	if err != nil {
-		return bufOut.Bytes(), bufErr.Bytes(), fmt.Errorf("'kubectl' failed: %v", err)
+		return bufOut.Bytes(), bufErr.Bytes(), fmt.Errorf("'kubectl' failed: %w", err)
 	}
 
 	return bufOut.Bytes(), bufErr.Bytes(), nil

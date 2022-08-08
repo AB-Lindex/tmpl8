@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"os"
 
-	"github.com/alexflint/go-arg"
+	arg "github.com/alexflint/go-arg"
 )
 
 type arguments struct {
@@ -19,7 +19,7 @@ type arguments struct {
 }
 
 func (arguments) Version() string {
-	return "v0.2.1"
+	return versionFunc()
 }
 
 func (arguments) Description() string {

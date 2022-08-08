@@ -1,7 +1,7 @@
 .PHONY: build
 build:
 	@mkdir -p bin
-	CGO_ENABLED=0 go build -o bin/tmpl8 . 
+	CGO_ENABLED=0 go build -v -o bin/tmpl8 . 
 
 test1:
 	cat test/input.json | go run . -v test/templates/* | tee test/input1.result
@@ -32,3 +32,15 @@ multi:
 
 adv:
 	go run . -i test/advanced/input.yaml test/advanced/*.tmpl8 -v
+
+check:
+	@echo "Checking...\n"
+	gocyclo -over 15 . || echo -n ""
+	@echo ""
+	golangci-lint run -E misspell -E depguard -E dupl -E goconst -E gocyclo -E ifshort -E predeclared -E tagliatelle -E errorlint -E godox -D structcheck
+	@echo ""
+	golint -min_confidence 0.21 -set_exit_status ./...
+	@echo "\nAll ok!"
+
+release:
+	gh release create $(TAG) -t $(TAG)

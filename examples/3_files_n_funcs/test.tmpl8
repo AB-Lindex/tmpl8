@@ -1,0 +1,12 @@
+spec:
+  filename: {{ .filename }}
+  funcs.go: |-
+{{ readfile .filename | indent 4 }}
+  b64: {{ readfile .filename | b64enc }}
+  json: {{ readfile .filename | toJson }}
+funcs:
+  call: {{ isfunc "call" }}
+  toJson: {{ isfunc "toJson" }}
+  readfile: {{ isfunc "readfile" }}
+  xyzzy: {{ isfunc "xyzzy" }}
+version: {{ version }}

@@ -2,12 +2,12 @@ package main
 
 import (
 	"bytes"
+	"errors"
 	"io"
 	"os"
 	"reflect"
 	"text/template"
 
-	"github.com/Masterminds/sprig/v3"
 	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 )
@@ -46,7 +46,12 @@ func main() {
 	for _, o := range olist {
 		err = process(t, o, &output)
 		if err != nil {
-			log.Error().Msgf("template-error: %v", err)
+			var execErr template.ExecError
+			if errors.As(err, &execErr) {
+				log.Error().Str("name", execErr.Name).Msgf("template exec-error: %v", execErr)
+			} else {
+				log.Error().Msgf("template-error: %v", err)
+			}
 			os.Exit(1)
 		}
 	}
@@ -71,7 +76,7 @@ func prepare(list []entry) ([]*template.Template, error) {
 	}
 	var tmpls []*template.Template
 
-	tmpl := template.New("base").Funcs(sprig.TxtFuncMap())
+	tmpl := template.New("base").Funcs(tmpl8funcs())
 	var err error
 
 	for _, e := range list {
@@ -103,12 +108,12 @@ func process(tmpls []*template.Template, o interface{}, w io.Writer) error {
 				buf.WriteByte('\n')
 			}
 		}
-		buf.WriteTo(w)
+		_, _ = buf.WriteTo(w)
 	}
 	return nil
 }
 
-func InterfaceSlice(slice interface{}) ([]interface{}, bool) {
+func interfaceSlice(slice interface{}) ([]interface{}, bool) {
 	s := reflect.ValueOf(slice)
 	if s.Kind() != reflect.Slice {
 		return nil, false

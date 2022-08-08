@@ -1,2 +1,4 @@
 bin/
 test/
+version.txt
+.COMMIT.md
