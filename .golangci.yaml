@@ -1,0 +1,15 @@
+linters-settings:
+  depguard:
+    rules:
+      main:
+        files:
+          - $all
+          - "!$test"
+        allow:
+          - $gostd
+          - github.com/alexflint/go-arg
+          - github.com/rs/zerolog
+          - github.com/rs/zerolog/log
+          - github.com/BurntSushi/toml
+          - github.com/Masterminds/sprig/v3
+#        deny:

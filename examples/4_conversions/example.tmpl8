@@ -1,0 +1,2 @@
+output:
+  {{- readfile "data.json" | fromJson | toYaml | nindent 2 }}
