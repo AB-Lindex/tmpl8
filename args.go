@@ -8,7 +8,7 @@ import (
 )
 
 type arguments struct {
-	Inputs      []string `arg:"-i,--input,separate" help:"filename of objects to import and process (use '-' for stdin)"`
+	Inputs      []string `arg:"-i,--input,separate" help:"filename of objects to import and process (use '-' for stdin or '?inlinedata' to use inlined data)" placeholder:"FILE"`
 	Templates   []string `arg:"required,positional" help:"filename.tmpl | @filenames.lst | k8s:namespace/configmap" placeholder:"TEMPLATE"`
 	Output      string   `arg:"-o,--output" help:"destination filename" placeholder:"FILE"`
 	Verbose     bool     `arg:"-v,--verbose" help:"verbose output"`
