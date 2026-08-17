@@ -2,13 +2,10 @@ package main
 
 import (
 	"bufio"
-	"encoding/json"
-	"fmt"
 	"io"
 	"os"
 	"strings"
 
-	"github.com/rs/zerolog"
 	"github.com/rs/zerolog/log"
 )
 
@@ -76,40 +73,4 @@ func loadFiles(fn string, allowK8s bool) ([]entry, error) {
 		result = append(result, inner...)
 	}
 	return result, nil
-}
-
-func loadK8s(fn string) ([]entry, error) {
-	if args.Verbose {
-		log.Info().Msgf("loading k8s-config '%s'...", fn)
-	}
-
-	parts := strings.Split(fn, "/")
-	if len(parts) != 2 {
-		return nil, fmt.Errorf("k8s-format is 'k8s:namespace/configname', not 'k8s:%s'", fn)
-	}
-
-	stdout, stderr, err := execCmd("kubectl", "get", "configmap", "-n", parts[0], parts[1], "-o", "json")
-	// stdout, err := cmd.StdoutPipe()
-	if err != nil {
-		log.WithLevel(zerolog.PanicLevel).Msgf("kubectl-error: %s", strings.TrimSuffix(string(stderr), "\n"))
-		return nil, err
-	}
-
-	var cm configmap
-	err = json.Unmarshal(stdout, &cm)
-	if err != nil {
-		return nil, err
-	}
-
-	var result []entry
-
-	for name, data := range cm.Data {
-		result = append(result, entry{fmt.Sprintf("k8s:%s/%s/%s", parts[0], parts[1], name), data})
-	}
-
-	return result, nil
-}
-
-type configmap struct {
-	Data map[string]string `json:"data"`
 }

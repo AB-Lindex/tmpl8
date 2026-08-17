@@ -1,0 +1,3 @@
+# read from disk and convert to YAML
+output:
+  {{- readfile .payload | fromJson | toYaml | nindent 2 }}

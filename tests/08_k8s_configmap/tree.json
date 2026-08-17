@@ -1,0 +1,12 @@
+[
+  {"type":"directory","name":".","contents":[
+    {"type":"directory","name":"app1","contents":[
+      {"type":"file","name":"0_serviceaccount.yaml"},
+      {"type":"file","name":"1_deployment.yaml"}
+    ]},
+    {"type":"directory","name":"worker1","contents":[
+      {"type":"file","name":"0_serviceaccount.yaml"},
+      {"type":"file","name":"1_cronjob.yaml"}
+    ]}
+  ]}
+]

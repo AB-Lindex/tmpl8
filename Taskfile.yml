@@ -1,0 +1,108 @@
+# https://taskfile.dev
+
+version: '3'
+
+vars:
+  GREETING: Hello, World!
+
+tasks:
+  default:
+    vars:
+      TITLE:
+        sh: task --list | head -1
+      TASKS:
+        sh: |
+          task --list --sort none |
+          tail +2 |
+          tr "\'" "\`" |
+          sed -E "s/(.*)/'\1'/" | tr "\n" " "
+      CHOICE:
+        sh: gum choose --header="{{.TITLE}}" {{.TASKS}}
+      TASK:
+        sh: echo "{{.CHOICE}}" | sed -E 's/\* ([^:]+):.*/\1/'
+    cmds:
+      - task: "{{.TASK}}"
+    silent: true
+
+  build:
+    desc: Build the binary
+    cmds:
+      - cmd: mkdir -p bin
+        silent: true
+      - CGO_ENABLED=0 go build -v -o bin/tmpl8 . 
+
+  test1:
+    desc: Test with all templates
+    cmds:
+      - cat test/input.json | go run . -v test/templates/* | tee test/input1.result
+
+  test2:
+    desc: Test with file list
+    cmds:
+      - find test/templates -type f > test/files.lst
+      - cat test/input.json | go run . @test/files.lst | tee test/input2.result
+
+  test3:
+    desc: Test with file list and k8s template
+    deps: [build]
+    cmds:
+      - find test/templates -type f > test/files.lst
+      - echo k8s:default/tmpl8-demo >> test/files.lst
+      - cat test/input.json | ./tmpl8 -v @test/files.lst | tee test/input2.result
+
+  install:
+    desc: Install binary to ~/bin
+    deps: [build]
+    cmds:
+      - cp bin/tmpl8 ~/bin
+
+  k8:
+    desc: Apply k8s kustomization
+    cmds:
+      - kubectl apply -k test/k8s
+
+  m-y:
+    desc: Test with YAML input
+    cmds:
+      - go run . <test/m-input.yaml test/m-tmpl.yaml -v
+
+  m-j:
+    desc: Test with JSON input
+    cmds:
+      - go run . -s <test/m-input.json test/m-tmpl.yaml -v
+
+  multi:
+    desc: Test with multiple inputs
+    cmds:
+      - go run . -i test/m-input.yaml -i test/m-input.json test/m-tmpl.yaml -v -s
+
+  adv:
+    desc: Test advanced templates
+    cmds:
+      - go run . -i test/advanced/input.yaml test/advanced/*.tmpl8 -v
+
+  check:
+    desc: Run linters and code checks
+    cmds:
+      - cmd: echo "Checking...\n"
+        silent: true
+      - gocyclo -over 15 . || echo -n ""
+      - cmd: echo ""
+        silent: true
+      - golangci-lint run -E misspell -E depguard -E dupl -E goconst -E gocyclo -E predeclared -E tagliatelle -E errorlint -E godox
+      - cmd: echo ""
+        silent: true
+      - golint -min_confidence 0.21 -set_exit_status ./...
+      - cmd: echo "\nAll ok!"
+        silent: true
+
+  release:
+    desc: Create a GitHub release
+    cmds:
+      - gh release create $(TAG) -t $(TAG)
+
+  update:
+    desc: update go.mod and imports
+    cmds:
+      - go get -u -v
+      - go mod tidy

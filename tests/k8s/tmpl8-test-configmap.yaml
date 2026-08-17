@@ -1,0 +1,12 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: tmpl8-test
+  namespace: default
+data:
+  greeting: "hello from configmap"
+  count: "42"
+  multiline: |
+    line one
+    line two
+    line three

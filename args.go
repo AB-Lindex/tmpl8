@@ -31,7 +31,7 @@ Supported input formats: JSON and YAML
 
 var args arguments
 
-func init() {
+func parseArgs() {
 	arg.MustParse(&args)
 
 	if len(args.Templates) == 0 {
