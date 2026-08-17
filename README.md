@@ -36,16 +36,18 @@ Supported input formats: JSON, YAML
 
 ### Options
 
-| Option            | Description |
-| ----------------- | ----------- |
-| `-i` / `--input`  | Input file(s) to import. Use `-` for stdin or `?inlinedata` for inline data. Can be specified multiple times. |
-| `-z`              | Add an empty object as input (for template-only processing) |
-| `-o` / `--output` | Write output to a file instead of stdout |
-| `-v` / `--verbose`| Verbose output |
-| `-t` / `--trace`  | Trace output (implies verbose) |
-| `-r` / `--raw`    | Do not ensure each template block ends with a newline (not recommended for YAML output) |
-| `-s` / `--split`  | Split a JSON array input into separate objects (similar to YAML `---` separators) |
-| `--version`       | Display current version |
+| Option              | Description |
+| ------------------- | ----------- |
+| `-i` / `--input`    | Input file(s) to import. Use `-` for stdin or `?inlinedata` for inline data. Can be specified multiple times. |
+| `-z`                | Add an empty object as input (for template-only processing) |
+| `-o` / `--output`   | Write output to a file instead of stdout |
+| `-v` / `--verbose`  | Verbose output |
+| `-t` / `--trace`    | Trace output (implies verbose) |
+| `-r` / `--raw`      | Do not ensure each template block ends with a newline (not recommended for YAML output) |
+| `-s` / `--split`    | Split a JSON array input into separate objects (similar to YAML `---` separators) |
+| `--left-delimiter`  | Template opening delimiter (default: `{{`) |
+| `--right-delimiter` | Template closing delimiter (default: `}}`) |
+| `--version`         | Display current version |
 
 ### Template argument forms
 
@@ -85,6 +87,15 @@ Prefix an argument with `?` to use the remaining text as raw data instead of a f
 
 ```sh
 $ tmpl8 -i '?name: alpha' '?{{ .name | upper }}'
+ALPHA
+```
+
+### Custom delimiters
+
+Use `--left-delimiter` and `--right-delimiter` when template sources must preserve Go-style `{{` and `}}` expressions for another tool.
+
+```sh
+$ tmpl8 --left-delimiter '[[' --right-delimiter ']]' -i '?name: alpha' '?[[ .name | upper ]]'
 ALPHA
 ```
 

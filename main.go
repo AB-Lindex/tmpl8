@@ -77,7 +77,7 @@ func prepare(list []entry) ([]*template.Template, error) {
 	}
 	var tmpls []*template.Template
 
-	tmpl := template.New("base").Funcs(tmpl8funcs())
+	tmpl := template.New("base").Funcs(tmpl8funcs()).Delims(args.LeftDelimiter, args.RightDelimiter)
 	var err error
 
 	for _, e := range list {

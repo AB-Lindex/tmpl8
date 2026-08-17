@@ -8,14 +8,16 @@ import (
 )
 
 type arguments struct {
-	Inputs      []string `arg:"-i,--input,separate" help:"filename of objects to import and process (use '-' for stdin or '?inlinedata' to use inlined data)" placeholder:"FILE"`
-	Templates   []string `arg:"required,positional" help:"filename.tmpl | @filenames.lst | k8s:namespace/configmap" placeholder:"TEMPLATE"`
-	Output      string   `arg:"-o,--output" help:"destination filename" placeholder:"FILE"`
-	Verbose     bool     `arg:"-v,--verbose" help:"verbose output"`
-	VeryVerbose bool     `arg:"-t,--trace" help:"trace output"`
-	Raw         bool     `arg:"-r,--raw" help:"will NOT ensure newline and end of each block"`
-	Split       bool     `arg:"-s,--split" help:"split json-array into separate 'documents'"`
-	NoInput     bool     `arg:"-z" help:"no input (equals -i '?{}')"`
+	Inputs         []string `arg:"-i,--input,separate" help:"filename of objects to import and process (use '-' for stdin or '?inlinedata' to use inlined data)" placeholder:"FILE"`
+	Templates      []string `arg:"required,positional" help:"filename.tmpl | @filenames.lst | k8s:namespace/configmap" placeholder:"TEMPLATE"`
+	Output         string   `arg:"-o,--output" help:"destination filename" placeholder:"FILE"`
+	Verbose        bool     `arg:"-v,--verbose" help:"verbose output"`
+	VeryVerbose    bool     `arg:"-t,--trace" help:"trace output"`
+	Raw            bool     `arg:"-r,--raw" help:"will NOT ensure newline and end of each block"`
+	Split          bool     `arg:"-s,--split" help:"split json-array into separate 'documents'"`
+	NoInput        bool     `arg:"-z" help:"no input (equals -i '?{}')"`
+	LeftDelimiter  string   `arg:"--left-delimiter" default:"{{" help:"template opening delimiter" placeholder:"DELIMITER"`
+	RightDelimiter string   `arg:"--right-delimiter" default:"}}" help:"template closing delimiter" placeholder:"DELIMITER"`
 }
 
 func (arguments) Version() string {
